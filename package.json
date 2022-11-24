@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "forever-monitor": "^3.0.3",
+    "globaloffensive": "^2.2.0",
+    "steam-tradeoffer-manager": "^2.10.5",
+    "steam-user": "^4.26.0",
+    "steamcommunity": "^2.6.0",
+    "uuid": "^9.0.0"
+  }
+}

@@ -1,0 +1,143 @@
+[1120/104256.496:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/104256.496:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/104256.573:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.605:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.605:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.606:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.607:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.607:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.607:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.608:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.608:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.608:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.608:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.608:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.727:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104256.727:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104257.116:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/104257.116:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/104257.146:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/104257.146:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/104258.382:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(30,8-58): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(35,8-28): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[1120/104259.518:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(71,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(94,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[1120/104301.006:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(48,8-58): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(53,8-28): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[1120/104313.504:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104313.504:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104313.580:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/104313.580:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/104552.209:INFO:CONSOLE(3)] "steammobile://steamguard?op=conftag&arg1=details12285478631", source: about:blank (3)
+[1120/104619.222:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104619.222:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/104619.300:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/104619.300:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/104620.063:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(71,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(94,10-42): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[1120/135813.573:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/135813.573:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/135813.587:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.597:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.598:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.687:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.687:WARNING:resource_bundle.cc(563)] locale resources are not loaded
+[1120/135813.704:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/135813.704:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/135813.759:WARNING:resource_bundle.cc(366)] locale_file_path.empty() for locale 
+[1120/135813.759:ERROR:main_delegate.cc(683)] Could not load locale pak for en-US
+[1120/135813.792:ERROR:cache_util_win.cc(20)] Unable to move the cache: 2
+[1120/135813.792:ERROR:cache_util.cc(134)] Unable to move cache folder GPUCache to old_GPUCache_000
+[1120/135813.792:ERROR:disk_cache.cc(169)] Unable to create cache
+[1120/135813.792:ERROR:shader_disk_cache.cc(601)] Shader Cache Creation failed: -2
+[1120/135813.871:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(30,8-58): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(35,8-28): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
+[1120/135815.720:WARNING:angle_platform_impl.cc(51)] rx::HLSLCompiler::compileToBinary(228): 
+C:\fakepath(48,8-58): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\fakepath(53,8-28): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+
