@@ -57,13 +57,57 @@ function declineOffer(offer){
 }
 
 //event listener for 'newOffer' event: accept/decline offer . . . . . $(selector).on(-'event'-,childSelector,data,-function-,map). -compulsory-
+// manager.on('newOffer', (offer) => {
+// 	if (offer.partner.getSteamID64() == config.kiblykat_ID) {
+// 		acceptOffer(offer);
+// 	}else {
+// 		declineOffer(offer);
+// 	}
+// });
+
 manager.on('newOffer', (offer) => {
-	if (offer.partner.getSteamID64() == config.kiblykat_ID) {
+	processOffer(offer);
+});
+
+function processOffer(offer){
+	if (offer.isGlitched() || offer.state === 11 ){
+		console.log("Offer was glitched, declining");
+	} else if (offer.partner.getSteamID64() === config.ownerID) {
+		acceptOffer(offer)
+	} else {
+		var ourItems = offer.itemsToGive;
+		var theirItems = offer.itemsToReceive;
+		var ourValue = 0;
+		var theirValue = 0;
+
+		for (var i in ourItems) {
+			var item = ourItems[i].market_name;
+			if(Prices[item]) {
+				ourValue += Prices[item].sell;
+			} else {
+				console.log("Invalid Value. ");
+				ourValue += 999999;
+			}
+		}
+
+		for(var i in theirItems) {
+			var item = theirItems[i].market_name;
+			if(Prices[item]) {
+				theirValue += Prices[item].buy;
+			} else {
+			console.log("Their value was different. ");
+			}
+		}
+	}
+	console.log("Our value was " +ourValue)
+	console.log("Their value was " +theirValue)
+
+	if(ourValue <= theirValue) {
 		acceptOffer(offer);
-	}else {
+	} else{
 		declineOffer(offer);
 	}
-});
+}
 
 
 // function sendRandomItem() {
