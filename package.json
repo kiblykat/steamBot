@@ -1,10 +1,9 @@
 {
   "dependencies": {
-    "forever-monitor": "^3.0.3",
-    "globaloffensive": "^2.2.0",
+    "steam-totp": "^2.1.2",
     "steam-tradeoffer-manager": "^2.10.5",
-    "steam-user": "^4.26.0",
-    "steamcommunity": "^2.6.0",
-    "uuid": "^9.0.0"
+    "steam-user": "^4.26.1",
+    "steamcommunity": "^3.44.3",
+    "steamid": "^2.0.0"
   }
 }
