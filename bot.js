@@ -2,10 +2,14 @@ const SteamUser = require('steam-user');
 const SteamTotp = require('steam-totp');
 const SteamCommunity = require("steamcommunity");
 const TradeOfferManager = require('steam-tradeoffer-manager');
+const TeamFortress2 = require('tf2');
+
+
 const config = require('./config.json');
 const Prices = require('./prices.json');
 
 const client = new SteamUser();
+const tf2 = new TeamFortress2(client);
 const community = new SteamCommunity();
 const manager = new TradeOfferManager({
 	steam: client,
@@ -26,8 +30,8 @@ client.logOn(logOnOptions);
 //event listener for logOn: sets persona + name, starts games
 client.on('loggedOn', () => {
   console.log('Logged into Steam');
-  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'little_john Buying Trading Cards');
-  //client.gamesPlayed([440, 730]);
+  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'little_john >Buying Trading Cards');
+  client.gamesPlayed([440]);
 });
 
 //event listener for webSession: to start Confirmation Checker
@@ -56,19 +60,7 @@ function declineOffer(offer){
 	});
 }
 
-//event listener for 'newOffer' event: accept/decline offer . . . . . $(selector).on(-'event'-,childSelector,data,-function-,map). -compulsory-
-// manager.on('newOffer', (offer) => {
-// 	if (offer.partner.getSteamID64() == config.kiblykat_ID) {
-// 		acceptOffer(offer);
-// 	}else {
-// 		declineOffer(offer);
-// 	}
-// });
-
-manager.on('newOffer', (offer) => {
-	processOffer(offer);
-});
-
+//function used in manager.on to process offers based on prices
 function processOffer(offer){
 	if (offer.isGlitched() || offer.state === 11 ){
 		console.log("Offer was glitched, declining");
@@ -109,6 +101,71 @@ function processOffer(offer){
 	}
 }
 
+manager.on('newOffer', (offer) => {
+	processOffer(offer);
+});
+
+//* * * * * * CRAFTING * * * * * *//
+
+var scrapAmt = config.scrapAmt;
+var pollCraft = config.pollCraft;
+
+tf2.on('connectedToGC', function() {
+	console.log("Connected to tf2 game server.");
+});
+ 
+tf2.on('backpackLoaded', function () {
+	console.log("Loaded our backpack.");
+});
+
+function craftS(amtNeedScrap) {
+	if (tf2.backpack == undefined) {
+		console.log("unable to load backpack, can't craft.");
+		return
+	} else {
+		console.log("attempting to craft...");
+		var amtOfScrap = 0;
+		for (var i = 0; i <tf2.backpack.length; i++) {
+			if (tf2.backpack[i].defIndex === 5000) {
+				amtOfScrap++;
+			}
+		}
+		for (var i = 0; i <tf2.backpack.length; i++) {
+			if (tf2.backpack[i].defIndex === 5002) {
+				amtOfScrap +=9;
+				var beep = new Array;
+				beep.push(parseInt(tf2.backpack[i].id));
+				tf2.craft(beep);
+ 
+	} else if (tf2.backpack[i].defIndex === 5001) {
+				amtOfScrap +=3;
+				var beep = new Array;
+				beep.push(parseInt(tf2.backpack[i].id));
+				tf2.craft(beep);
+			}
+			if (amtOfScrap >= amtNeedScrap) {
+				break;
+			}
+		} 
+	}
+}
+
+tf2.on('craftingComplete', function(e) {
+	console.log("Finished crafting.");
+});
+
+client.on('friendMessage#'+config.kiblykat_ID, function(steamID, message) {
+	if (message == "craft") {
+		craftS(scrapAmt);
+		console.log("Recieved order to craft from admin.")
+	} else {
+		console.log("craft error.")
+	}
+});
+ 
+setInterval(function() {
+	craftS(scrapAmt);
+}, 1000 * 60 * pollCraft)
 
 // function sendRandomItem() {
 // 	const partner = config.kiblykat_ID;
