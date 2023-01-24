@@ -3,10 +3,14 @@ const SteamTotp = require('steam-totp');
 const SteamCommunity = require("steamcommunity");
 const TradeOfferManager = require('steam-tradeoffer-manager');
 const TeamFortress2 = require('tf2');
-
+var fs = require('fs');
 
 const config = require('./config.json');
-const Prices = require('./prices.json');
+
+//const Prices = require('./prices.json');	//bad for big json files
+
+var json = JSON.parse(fs.readFileSync('./prices.json', 'utf8'));
+
 const { RequestTF2FriendsResponse } = require('tf2/language');
 
 const client = new SteamUser();
@@ -114,11 +118,13 @@ var pollCraft = config.pollCraft;
 //event listener to check connection to GameClient (tf2 GC started using gamesPlayed method([440]) above l35)
 tf2.on('connectedToGC', () => {	
 	console.log("Connected to tf2 game server")
+	
 });
 
 //event listener to check if backpackLoaded 
 tf2.on('backpackLoaded', () => {
 	console.log("Loaded our backpack")
+	metalManager()
 	craftScrap()
 });
 
@@ -127,7 +133,9 @@ tf2.on('craftingComplete', (recipe,itemsGained) => {
 	console.log(rec_list)
 });
 
-function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
+
+
+function metalManager()	//run this before crafting, as backpack is loaded here.
 {
 	//current metal in backpack
 	scrapInBackpack = 0
@@ -144,7 +152,7 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		console.log("Unable to load backpack, can't craft")
 		return
 	} else {
-		//populate value for InBackpack
+		//populate value for _InBackpack
 		count = 0;
 		var backpack = tf2.backpack 	//backpack contains list 
 		for(var i =0; i < backpack.length; i++)
@@ -166,34 +174,38 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		console.log(`rec: ${recInBackpack}`)
 		console.log(`ref: ${refInBackpack}`)
 		// console.log(backpack)
-		if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
-		{
-			//craft the difference scrapRequired - scrapInBackpack
-			//craft rec to scrap
-			rec_list = []	//stores the original_id for RECLAIMED
-			diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
-			recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
-			recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
+	}
+}
 
-			for(var i =0; i < backpack.length; i++)
+function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
+{
+	if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
+	{
+		//craft the difference scrapRequired - scrapInBackpack
+		//craft rec to scrap
+		rec_list = []	//stores the original_id for RECLAIMED
+		diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
+		recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
+		recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
+
+		for(var i =0; i < backpack.length; i++)
+		{
+			if(backpack[i].def_index == 5001) //if the item id is a rec
 			{
-				if(backpack[i].def_index == 5001) //if the item id is a rec
-				{
-					rec_list.push(backpack[i].id)
-				}
-				//save all recs in a list, use shift method to extract the original_id of the metal for crafting
+				rec_list.push(backpack[i].id)
 			}
-			console.log(rec_list)
-			while(scrapInBackpack < scrapRequired)
+			//save all recs in a list, use shift method to extract the original_id of the metal for crafting
+		}
+		console.log(rec_list)
+		while(scrapInBackpack < scrapRequired)
+		{
+			if(rec_list.length>0) //if reclist doesnt return empty list
 			{
-				if(rec_list.length>0) //if reclist doesnt return empty list
-				{
-					console.log("smelting reclaimed")
-					tf2.craft([rec_list.shift()], 22)
-					scrapInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
-				} else {
-					console.log("no reclaimed to smelt")
-				}
+				console.log("smelting reclaimed")
+				tf2.craft([rec_list.shift()], 22)
+				scrapInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
+			} else {
+				console.log("no reclaimed to smelt")
 			}
 		}
 	}
