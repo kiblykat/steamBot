@@ -124,19 +124,22 @@ tf2.on('backpackLoaded', () => {
 
 function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 {
+	//current metal in backpack
 	scrapInBackpack = 0
-	scrapRequired = 0
 	recInBackpack = 0
-	recRequired = 0
 	refInBackpack = 0
-	refRequired = 0
+
+	//expected metal in backpack
+	scrapRequired = 9
+	recRequired = 21
+	refRequired = 40
 
 	if (tf2.backpack == undefined)
 	{
 		console.log("Unable to load backpack, can't craft")
 		return
 	} else {
-		//populate value for ScrapInBackpack
+		//populate value for InBackpack
 		count = 0;
 		var backpack = tf2.backpack 	//backpack contains list 
 		for(var i =0; i < backpack.length; i++)
@@ -157,10 +160,13 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		console.log(`scrap: ${scrapInBackpack}`)
 		console.log(`rec: ${recInBackpack}`)
 		console.log(`ref: ${refInBackpack}`)
-
+		console.log(backpack)
 		if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
 		{
-			//craft the difference ScrapRequired - ScrapInBackpack
+			//craft the difference scrapRequired - scrapInBackpack
+			//craft rec to scrap
+			diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
+			recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
 			
 		}
 	}
