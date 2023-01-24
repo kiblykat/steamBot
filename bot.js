@@ -122,6 +122,10 @@ tf2.on('backpackLoaded', () => {
 	craftScrap()
 });
 
+tf2.on('craftingComplete', () => {
+	console.log("crafting complete")
+});
+
 function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 {
 	//current metal in backpack
@@ -165,9 +169,23 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		{
 			//craft the difference scrapRequired - scrapInBackpack
 			//craft rec to scrap
+			rec_list = []	//stores the original_id for RECLAIMED
 			diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
 			recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
-			
+			while(rec_list.length < 3)			//will never quit if there is less than 3 rec in bp
+			{
+				for(var i =0; i < backpack.length; i++)
+				{
+					if(backpack[i].def_index == 5001) //if the item id is a rec
+					{
+						rec_list.push(backpack[i].original_id)
+					}
+					//save all recs in a list, use shift method to extract the original_id of the metal for crafting
+				}
+			}
+			console.log(rec_list)
+			tf2.craft(rec_list.shift())
+
 		}
 	}
 }
