@@ -124,18 +124,18 @@ tf2.on('connectedToGC', () => {
 //event listener to check if backpackLoaded 
 tf2.on('backpackLoaded', () => {
 	console.log("Loaded our backpack")
-	metalManager()
+	metalManager()	
 	craftScrap()
+	craftRec()
 });
 
 tf2.on('craftingComplete', (recipe,itemsGained) => {
 	console.log("crafting complete")
-	console.log(rec_list)
 });
 
 
 
-function metalManager()	//run this before crafting, as backpack is loaded here.
+function metalManager()	//run this before crafting, loads backpack and manages metal.
 {
 	//current metal in backpack
 	scrapInBackpack = 0
@@ -144,8 +144,8 @@ function metalManager()	//run this before crafting, as backpack is loaded here.
 
 	//expected metal in backpack
 	scrapRequired = 9
-	recRequired = 21
-	refRequired = 40
+	recRequired = 20
+	//refRequired = 40
 
 	if (tf2.backpack == undefined)
 	{
@@ -188,11 +188,11 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
 		recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
 
-		for(var i =0; i < backpack.length; i++)
+		for(var i =0; i < tf2.backpack.length; i++)
 		{
-			if(backpack[i].def_index == 5001) //if the item id is a rec
+			if(tf2.backpack[i].def_index == 5001) //if the item id is a rec
 			{
-				rec_list.push(backpack[i].id)
+				rec_list.push(tf2.backpack[i].id)
 			}
 			//save all recs in a list, use shift method to extract the original_id of the metal for crafting
 		}
@@ -211,7 +211,39 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 	}
 }
 
+function craftRec() 	//scrap= 5000, rec=5001, ref=5002
+{
+	if(recInBackpack < recRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
+	{
+		//craft the difference scrapRequired - scrapInBackpack
+		//craft rec to scrap
+		ref_list = []	//stores the original_id for RECLAIMED
+		diffRec = recRequired - recInBackpack	//extra scrap needed
+		refCraft = diffRec/3	//number of rec required to be crafted into Scrap
+		refCraft = Math.ceil(refCraft) //round UP the number of reclaimed needed
 
+		for(var i =0; i < tf2.backpack.length; i++)
+		{
+			if(tf2.backpack[i].def_index == 5002) //if the item id is a ref
+			{
+				ref_list.push(tf2.backpack[i].id)
+			}
+			//save all refs in a list, use shift method to extract the original_id of the metal for crafting
+		}
+		console.log(ref_list)
+		while(recInBackpack < recRequired)
+		{
+			if(ref_list.length>0) //if reclist doesnt return empty list
+			{
+				console.log("smelting refined")
+				tf2.craft([ref_list.shift()], 23)
+				recInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
+			} else {
+				console.log("no refined to smelt")
+			}
+		}
+	}
+}
 
 // var scrapAmt = config.scrapAmt;
 // var pollCraft = config.pollCraft;
