@@ -7,6 +7,7 @@ const TeamFortress2 = require('tf2');
 
 const config = require('./config.json');
 const Prices = require('./prices.json');
+const { RequestTF2FriendsResponse } = require('tf2/language');
 
 const client = new SteamUser();
 const tf2 = new TeamFortress2(client);
@@ -25,13 +26,13 @@ const logOnOptions = {
 };
 
 //code for logging in
-client.logOn(logOnOptions);
+client.logOn(logOnOptions);	//this logs me into Steam (NOT TF2)
 
 //event listener for logOn: sets persona + name, starts games
 client.on('loggedOn', () => {
   console.log('Logged into Steam');
   client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'little_john >Buying Trading Cards');
-  client.gamesPlayed([440]);
+  client.gamesPlayed([440]);		//this is the code that starts the tf2 client and loads backpack, so that
 });
 
 //event listener for webSession: to start Confirmation Checker
@@ -110,60 +111,120 @@ manager.on('newOffer', (offer) => {
 var scrapAmt = config.scrapAmt;
 var pollCraft = config.pollCraft;
 
-tf2.on('connectedToGC', function() {
-	console.log("Connected to tf2 game server.");
-});
- 
-tf2.on('backpackLoaded', function () {
-	console.log("Loaded our backpack.");
+//event listener to check connection to GameClient (tf2 GC started using gamesPlayed method([440]) above l35)
+tf2.on('connectedToGC', () => {	
+	console.log("Connected to tf2 game server")
 });
 
-function craftS(amtNeedScrap) {
-	if (tf2.backpack == undefined) {
-		console.log("unable to load backpack, can't craft.");
+//event listener to check if backpackLoaded 
+tf2.on('backpackLoaded', () => {
+	console.log("Loaded our backpack")
+	craftScrap()
+});
+
+function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
+{
+	scrapInBackpack = 0
+	scrapRequired = 0
+	recInBackpack = 0
+	recRequired = 0
+	refInBackpack = 0
+	refRequired = 0
+
+	if (tf2.backpack == undefined)
+	{
+		console.log("Unable to load backpack, can't craft")
 		return
 	} else {
-		console.log("attempting to craft...");
-		var amtOfScrap = 0;
-		for (var i = 0; i <tf2.backpack.length; i++) {
-			if (tf2.backpack[i].defIndex === 5000) {
-				amtOfScrap++;
+		//populate value for ScrapInBackpack
+		count = 0;
+		var backpack = tf2.backpack 	//backpack contains list 
+		for(var i =0; i < backpack.length; i++)
+		{
+			switch(backpack[i].def_index){	//switch counter for number of each class of metal 
+				case 5000:
+					scrapInBackpack+=1
+					break
+				case 5001:
+					recInBackpack+=1
+					break
+				case 5002:
+					refInBackpack+=1	
+					break
 			}
+			count+=1
 		}
-		for (var i = 0; i <tf2.backpack.length; i++) {
-			if (tf2.backpack[i].defIndex === 5002) {
-				amtOfScrap +=9;
-				var beep = new Array;
-				beep.push(parseInt(tf2.backpack[i].id));
-				tf2.craft(beep);
- 
-	} else if (tf2.backpack[i].defIndex === 5001) {
-				amtOfScrap +=3;
-				var beep = new Array;
-				beep.push(parseInt(tf2.backpack[i].id));
-				tf2.craft(beep);
-			}
-			if (amtOfScrap >= amtNeedScrap) {
-				break;
-			}
-		} 
+		console.log(`scrap: ${scrapInBackpack}`)
+		console.log(`rec: ${recInBackpack}`)
+		console.log(`ref: ${refInBackpack}`)
+
+		if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
+		{
+			//craft the difference ScrapRequired - ScrapInBackpack
+			
+		}
 	}
 }
 
-tf2.on('craftingComplete', function(e) {
-	console.log("Finished crafting.");
-});
 
-client.on('friendMessage#'+config.kiblykat_ID, function(steamID, message) {
-	if (message == "craft") {
-		craftS(scrapAmt);
-		console.log("Recieved order to craft from admin.")
-	} else {
-		console.log("craft error.")
-	}
-});
+
+// var scrapAmt = config.scrapAmt;
+// var pollCraft = config.pollCraft;
+
+// tf2.on('connectedToGC', function() {
+// 	console.log("Connected to tf2 game server.");
+// });
  
-setInterval(function() {
-	craftS(scrapAmt);
-}, 1000 * 60 * pollCraft)
+// tf2.on('backpackLoaded', function () {
+// 	console.log("Loaded our backpack.");
+// });
+
+// function craftS(amtNeedScrap) {
+// 	if (tf2.backpack == undefined) {
+// 		console.log("unable to load backpack, can't craft.");
+// 		return
+// 	} else {
+// 		console.log("attempting to craft...");
+// 		var amtOfScrap = 0;
+// 		for (var i = 0; i <tf2.backpack.length; i++) {
+// 			if (tf2.backpack[i].defIndex === 5000) {
+// 				amtOfScrap++;
+// 			}
+// 		}
+// 		for (var i = 0; i <tf2.backpack.length; i++) {
+// 			if (tf2.backpack[i].defIndex === 5002) {
+// 				amtOfScrap +=9;
+// 				var beep = new Array;
+// 				beep.push(parseInt(tf2.backpack[i].id));
+// 				tf2.craft(beep);
+ 
+// 	} else if (tf2.backpack[i].defIndex === 5001) {
+// 				amtOfScrap +=3;
+// 				var beep = new Array;
+// 				beep.push(parseInt(tf2.backpack[i].id));
+// 				tf2.craft(beep);
+// 			}
+// 			if (amtOfScrap >= amtNeedScrap) {
+// 				break;
+// 			}
+// 		} 
+// 	}
+// }
+
+// tf2.on('craftingComplete', function(e) {
+// 	console.log("Finished crafting.");
+// });
+
+// client.on('friendMessage#'+config.kiblykat_ID, function(steamID, message) {
+// 	if (message == "craft") {
+// 		craftS(scrapAmt);
+// 		console.log("Recieved order to craft from admin.")
+// 	} else {
+// 		console.log("craft error.")
+// 	}
+// });
+ 
+// setInterval(function() {
+// 	craftS(scrapAmt);
+// }, 1000 * 60 * pollCraft)
 
