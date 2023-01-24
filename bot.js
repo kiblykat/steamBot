@@ -122,8 +122,9 @@ tf2.on('backpackLoaded', () => {
 	craftScrap()
 });
 
-tf2.on('craftingComplete', () => {
+tf2.on('craftingComplete', (recipe,itemsGained) => {
 	console.log("crafting complete")
+	console.log(rec_list)
 });
 
 function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
@@ -164,7 +165,7 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		console.log(`scrap: ${scrapInBackpack}`)
 		console.log(`rec: ${recInBackpack}`)
 		console.log(`ref: ${refInBackpack}`)
-		console.log(backpack)
+		// console.log(backpack)
 		if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
 		{
 			//craft the difference scrapRequired - scrapInBackpack
@@ -172,20 +173,28 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 			rec_list = []	//stores the original_id for RECLAIMED
 			diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
 			recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
-			while(rec_list.length < 3)			//will never quit if there is less than 3 rec in bp
+			recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
+
+			for(var i =0; i < backpack.length; i++)
 			{
-				for(var i =0; i < backpack.length; i++)
+				if(backpack[i].def_index == 5001) //if the item id is a rec
 				{
-					if(backpack[i].def_index == 5001) //if the item id is a rec
-					{
-						rec_list.push(backpack[i].original_id)
-					}
-					//save all recs in a list, use shift method to extract the original_id of the metal for crafting
+					rec_list.push(backpack[i].id)
 				}
+				//save all recs in a list, use shift method to extract the original_id of the metal for crafting
 			}
 			console.log(rec_list)
-			tf2.craft(rec_list.shift())
-
+			while(scrapInBackpack < scrapRequired)
+			{
+				if(rec_list.length>0) //if reclist doesnt return empty list
+				{
+					console.log("smelting reclaimed")
+					tf2.craft([rec_list.shift()], 22)
+					scrapInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
+				} else {
+					console.log("no reclaimed to smelt")
+				}
+			}
 		}
 	}
 }
