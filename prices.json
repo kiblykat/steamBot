@@ -1,0 +1,22 @@
+{
+    "Scrap Metal":
+    {
+        "buy": 1,
+        "sell":1
+    },
+    "Reclaimed Metal":
+    {
+        "buy": 3,
+        "sell":3
+    },
+    "Refined Metal":
+    {
+        "buy": 9,
+        "sell":9
+    },
+    "The Guide":
+    {
+        "buy": 3,
+        "sell":4
+    }
+}
