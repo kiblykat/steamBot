@@ -35,7 +35,7 @@ client.logOn(logOnOptions);	//this logs me into Steam (NOT TF2)
 //event listener for logOn: sets persona + name, starts games
 client.on('loggedOn', () => {
   console.log('Logged into Steam');
-  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'little_john >Buying Trading Cards');
+  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'Cardy B> Trading Card');
   client.gamesPlayed([440]);		//this is the code that starts the tf2 client and loads backpack, so that
 });
 
@@ -107,7 +107,11 @@ function processOffer(offer){
 }
 
 manager.on('newOffer', (offer) => {
+	console.log("new offer detected, processing...")
 	processOffer(offer);
+	metalManager()
+	craftScrap()
+	craftRec()
 });
 
 //* * * * * * CRAFTING * * * * * *//
@@ -135,7 +139,7 @@ tf2.on('craftingComplete', (recipe,itemsGained) => {
 
 
 
-function metalManager()	//run this before crafting, loads backpack and manages metal.
+function metalManager()	//run this before crafting, loads backpack and checks/manages metal.
 {
 	//current metal in backpack
 	scrapInBackpack = 0
@@ -145,7 +149,7 @@ function metalManager()	//run this before crafting, loads backpack and manages m
 	//expected metal in backpack
 	scrapRequired = 9
 	recRequired = 20
-	//refRequired = 40
+	refRequired = 25
 
 	if (tf2.backpack == undefined)
 	{
@@ -170,10 +174,14 @@ function metalManager()	//run this before crafting, loads backpack and manages m
 			}
 			count+=1
 		}
-		console.log(`scrap: ${scrapInBackpack}`)
-		console.log(`rec: ${recInBackpack}`)
-		console.log(`ref: ${refInBackpack}`)
-		// console.log(backpack)
+		console.log(`Scrap: ${scrapInBackpack}`)
+		console.log(`Rec: ${recInBackpack}`)
+		console.log(`Ref: ${refInBackpack}`)
+
+		if(refInBackpack < refRequired)
+		{
+			console.log(`Refined stock at ${refInBackpack}. Minimum ref defined: ${refRequired}`)
+		}
 	}
 }
 
@@ -183,6 +191,7 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 	{
 		//craft the difference scrapRequired - scrapInBackpack
 		//craft rec to scrap
+		console.log("Scrap reserves low... crafting Scrap")
 		rec_list = []	//stores the original_id for RECLAIMED
 		diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
 		recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
@@ -201,11 +210,11 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		{
 			if(rec_list.length>0) //if reclist doesnt return empty list
 			{
-				console.log("smelting reclaimed")
+				console.log("smelting Reclaimed...")
 				tf2.craft([rec_list.shift()], 22)
 				scrapInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
 			} else {
-				console.log("no reclaimed to smelt")
+				console.log("No Reclaimed to smelt")
 			}
 		}
 	}
@@ -217,6 +226,7 @@ function craftRec() 	//scrap= 5000, rec=5001, ref=5002
 	{
 		//craft the difference scrapRequired - scrapInBackpack
 		//craft rec to scrap
+		console.log("Reclaimed reserves low...")
 		ref_list = []	//stores the original_id for RECLAIMED
 		diffRec = recRequired - recInBackpack	//extra scrap needed
 		refCraft = diffRec/3	//number of rec required to be crafted into Scrap
@@ -235,7 +245,7 @@ function craftRec() 	//scrap= 5000, rec=5001, ref=5002
 		{
 			if(ref_list.length>0) //if reclist doesnt return empty list
 			{
-				console.log("smelting refined")
+				console.log("Smelting refined...")
 				tf2.craft([ref_list.shift()], 23)
 				recInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
 			} else {
