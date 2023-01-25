@@ -9,7 +9,7 @@ const config = require('./config.json');
 
 //const Prices = require('./prices.json');	//bad for big json files
 
-var json = JSON.parse(fs.readFileSync('./prices.json', 'utf8'));
+var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8'));
 
 const { RequestTF2FriendsResponse } = require('tf2/language');
 
