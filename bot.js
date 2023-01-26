@@ -90,9 +90,12 @@ function processOffer(offer){
 		for(var i in theirItems) {
 			var item = theirItems[i].market_name;
 			if(Prices[item]) {
-				theirValue += Prices[item].buy;
+				if(theirItems[i].marketable == true)
+				{
+					theirValue += Prices[item].buy;
+				}
 			} else {
-			console.log("Their value was different. ");
+			console.log("Their value was too low. ");
 			}
 		}
 	}
@@ -113,8 +116,10 @@ manager.on('newOffer', (offer) => {
 	craftScrap()
 	craftRec()
 });
+//* * * * * * * * * * * * * CHECKING NON-MARKETABLE * * * * * * * * * * * * * * * * * * *//
 
-//* * * * * * CRAFTING * * * * * *//
+
+//* * * * * * * * * * * * * CRAFTING * * * * * * * * * * * * * * * * * * *//
 
 var scrapAmt = config.scrapAmt;
 var pollCraft = config.pollCraft;
@@ -197,7 +202,7 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 		recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
 		recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
 
-		for(var i =0; i < tf2.backpack.length; i++)
+		for(var i =0; i < tf2.backpack.length; i++)							//CURRENT ERROR GETTING THROWN HERE
 		{
 			if(tf2.backpack[i].def_index == 5001) //if the item id is a rec
 			{
