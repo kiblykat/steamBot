@@ -8,8 +8,8 @@ const { RequestTF2FriendsResponse } = require('tf2/language');
 
 //Requiring from local files
 const config = require('./config.json');
+const  metalManager  = require('./metalManager');
 const crafting = require('./crafting');
-
 
 //const Prices = require('./prices.json');	//bad for big json files
 
@@ -56,8 +56,6 @@ client.on('webSession', (sessionid,cookies) =>{
 
 	community.setCookies(cookies);
 	community.startConfirmationChecker(5000, config.identitySecret);
-
-	// sendRandomItem(); 	//executes the sendRandomItem method when webSession is started
 });
 
 //function used in newOffer event listener
@@ -120,12 +118,13 @@ function processOffer(offer){
 	}
 }
 
+//when new offer is received
 manager.on('newOffer', (offer) => {
 	console.log("new offer detected, processing...")
 	processOffer(offer);
-	metalManager()
-	crafting.craftScrap()
-	crafting.craftRec()
+	metalManager.metalManager(tf2)
+	crafting.craftScrap(tf2)
+	crafting.craftRec(tf2)
 });
 
 //* * * * * * * * * * * * * CRAFTING * * * * * * * * * * * * * * * * * * *//
@@ -141,64 +140,17 @@ tf2.on('connectedToGC', () => {
 
 //event listener to check if backpackLoaded 
 tf2.on('backpackLoaded', () => {
+	// console.log("hello botjs", tf2)
 	console.log("Loaded our backpack")
-	metalManager()	
-	crafting.craftScrap()
-	crafting.craftRec()
+	metalManager.metalManager(tf2)	
+	crafting.craftScrap(tf2)
+	crafting.craftRec(tf2)
 });
 
 tf2.on('craftingComplete', (recipe,itemsGained) => {
 	console.log("crafting complete")
 });
 
-
-
-function metalManager()	//run this before crafting, loads backpack and checks/manages metal.
-{
-	//current metal in backpack
-	scrapInBackpack = 0
-	recInBackpack = 0
-	refInBackpack = 0
-
-	//expected metal in backpack
-	scrapRequired = 9
-	recRequired = 20
-	refRequired = 40
-
-	if (tf2.backpack == undefined)
-	{
-		console.log("Unable to load backpack, can't craft")
-		setInterval(5000)
-		return
-	} else {
-		//populate value for _InBackpack
-		count = 0;
-		var backpack = tf2.backpack 	//backpack contains list 
-		for(var i =0; i < backpack.length; i++)
-		{
-			switch(backpack[i].def_index){	//switch counter for number of each class of metal 
-				case 5000:
-					scrapInBackpack+=1
-					break
-				case 5001:
-					recInBackpack+=1
-					break
-				case 5002:
-					refInBackpack+=1	
-					break
-			}
-			count+=1
-		}
-		console.log(`Scrap: ${scrapInBackpack}`)
-		console.log(`Rec: ${recInBackpack}`)
-		console.log(`Ref: ${refInBackpack}`)
-
-		if(refInBackpack < refRequired)
-		{
-			console.log(`REFINED STOCK LOW!! CRAFT MORE PL0X. Minimum ref defined: ${refRequired}`)
-		}
-	}
-}
 
 
 // var scrapAmt = config.scrapAmt;

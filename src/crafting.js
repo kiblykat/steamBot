@@ -1,4 +1,8 @@
-function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
+/* this file is used to craft scrap and rec when reserves are low. The minimum 
+   amount of metal required to be present in the backpack is defined in metalManager */
+
+
+function craftScrapFunc(tf2) 	//scrap= 5000, rec=5001, ref=5002
 {
 	if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
 	{
@@ -33,7 +37,7 @@ function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
 	}
 }
 
-function craftRec() 	//scrap= 5000, rec=5001, ref=5002
+function craftRecFunc(tf2) 	//scrap= 5000, rec=5001, ref=5002
 {
 	if(recInBackpack < recRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
 	{
@@ -62,11 +66,11 @@ function craftRec() 	//scrap= 5000, rec=5001, ref=5002
 				tf2.craft([ref_list.shift()], 23)
 				recInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
 			} else {
-				console.log("no refined to smelt")
+				console.log("no ref left to smelt")
 			}
 		}
 	}
 }
 
-module.exports.craftScrap = craftScrap;
-module.exports.craftRec = craftRec;
+module.exports.craftScrap = craftScrapFunc;
+module.exports.craftRec = craftRecFunc;
