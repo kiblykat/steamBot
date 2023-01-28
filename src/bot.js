@@ -4,8 +4,12 @@ const SteamCommunity = require("steamcommunity");
 const TradeOfferManager = require('steam-tradeoffer-manager');
 const TeamFortress2 = require('tf2');
 var fs = require('fs');
+const { RequestTF2FriendsResponse } = require('tf2/language');
 
+//Requiring from local files
 const config = require('./config.json');
+const crafting = require('./crafting');
+
 
 //const Prices = require('./prices.json');	//bad for big json files
 
@@ -16,10 +20,13 @@ var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8')); //s
 // 	var Prices = JSON.parse(data)
 // });
 
-const { RequestTF2FriendsResponse } = require('tf2/language');
+
 
 const client = new SteamUser();
-const tf2 = new TeamFortress2(client);
+const tf2 = new TeamFortress2(client);	//this starts the GameClient
+
+module.exports.tf2 = tf2	//exporting so that other files within folder can use the same tf2 gameClient
+
 const community = new SteamCommunity();
 const manager = new TradeOfferManager({
 	steam: client,
@@ -118,8 +125,8 @@ manager.on('newOffer', (offer) => {
 	console.log("new offer detected, processing...")
 	processOffer(offer);
 	metalManager()
-	craftScrap()
-	craftRec()
+	crafting.craftScrap()
+	crafting.craftRec()
 });
 
 //* * * * * * * * * * * * * CRAFTING * * * * * * * * * * * * * * * * * * *//
@@ -137,8 +144,8 @@ tf2.on('connectedToGC', () => {
 tf2.on('backpackLoaded', () => {
 	console.log("Loaded our backpack")
 	metalManager()	
-	craftScrap()
-	craftRec()
+	crafting.craftScrap()
+	crafting.craftRec()
 });
 
 tf2.on('craftingComplete', (recipe,itemsGained) => {
@@ -194,75 +201,6 @@ function metalManager()	//run this before crafting, loads backpack and checks/ma
 	}
 }
 
-function craftScrap() 	//scrap= 5000, rec=5001, ref=5002
-{
-	if(scrapInBackpack < scrapRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
-	{
-		//craft the difference scrapRequired - scrapInBackpack
-		//craft rec to scrap
-		console.log("Scrap reserves low... crafting Scrap")
-		rec_list = []	//stores the original_id for RECLAIMED
-		diffScrap = scrapRequired - scrapInBackpack	//extra scrap needed
-		recCraft = diffScrap/3	//number of rec required to be crafted into Scrap
-		recCraft = Math.ceil(recCraft) //round UP the number of reclaimed needed
-
-		for(var i =0; i < tf2.backpack.length; i++)							//CURRENT ERROR GETTING THROWN HERE
-		{
-			if(tf2.backpack[i].def_index == 5001) //if the item id is a rec
-			{
-				rec_list.push(tf2.backpack[i].id)
-			}
-			//save all recs in a list, use shift method to extract the original_id of the metal for crafting
-		}
-		console.log(rec_list)
-		while(scrapInBackpack < scrapRequired)
-		{
-			if(rec_list.length>0) //if reclist doesnt return empty list
-			{
-				console.log("smelting Reclaimed...")
-				tf2.craft([rec_list.shift()], 22)
-				scrapInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
-			} else {
-				console.log("No Reclaimed to smelt")
-			}
-		}
-	}
-}
-
-function craftRec() 	//scrap= 5000, rec=5001, ref=5002
-{
-	if(recInBackpack < recRequired)	//if (Scrap in BP) < (Scrap Amt we predetermine), then enter decision
-	{
-		//craft the difference scrapRequired - scrapInBackpack
-		//craft rec to scrap
-		console.log("Reclaimed reserves low...")
-		ref_list = []	//stores the original_id for RECLAIMED
-		diffRec = recRequired - recInBackpack	//extra scrap needed
-		refCraft = diffRec/3	//number of rec required to be crafted into Scrap
-		refCraft = Math.ceil(refCraft) //round UP the number of reclaimed needed
-
-		for(var i =0; i < tf2.backpack.length; i++)
-		{
-			if(tf2.backpack[i].def_index == 5002) //if the item id is a ref
-			{
-				ref_list.push(tf2.backpack[i].id)
-			}
-			//save all refs in a list, use shift method to extract the original_id of the metal for crafting
-		}
-		console.log(ref_list)
-		while(recInBackpack < recRequired)
-		{
-			if(ref_list.length>0) //if reclist doesnt return empty list
-			{
-				console.log("Smelting refined...")
-				tf2.craft([ref_list.shift()], 23)
-				recInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
-			} else {
-				console.log("no refined to smelt")
-			}
-		}
-	}
-}
 
 // var scrapAmt = config.scrapAmt;
 // var pollCraft = config.pollCraft;
