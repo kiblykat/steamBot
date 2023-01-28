@@ -9,7 +9,12 @@ const config = require('./config.json');
 
 //const Prices = require('./prices.json');	//bad for big json files
 
-var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8'));
+var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8')); //synchronous version
+
+// fs.readFile('./src/prices_generated.json', 'utf8', function(err,data){
+// 	if(err) throw err;
+// 	var Prices = JSON.parse(data)
+// });
 
 const { RequestTF2FriendsResponse } = require('tf2/language');
 
@@ -116,8 +121,6 @@ manager.on('newOffer', (offer) => {
 	craftScrap()
 	craftRec()
 });
-//* * * * * * * * * * * * * CHECKING NON-MARKETABLE * * * * * * * * * * * * * * * * * * *//
-
 
 //* * * * * * * * * * * * * CRAFTING * * * * * * * * * * * * * * * * * * *//
 
@@ -154,11 +157,12 @@ function metalManager()	//run this before crafting, loads backpack and checks/ma
 	//expected metal in backpack
 	scrapRequired = 9
 	recRequired = 20
-	refRequired = 25
+	refRequired = 40
 
 	if (tf2.backpack == undefined)
 	{
 		console.log("Unable to load backpack, can't craft")
+		setInterval(5000)
 		return
 	} else {
 		//populate value for _InBackpack
@@ -185,7 +189,7 @@ function metalManager()	//run this before crafting, loads backpack and checks/ma
 
 		if(refInBackpack < refRequired)
 		{
-			console.log(`Refined stock at ${refInBackpack}. Minimum ref defined: ${refRequired}`)
+			console.log(`REFINED STOCK LOW!! CRAFT MORE PL0X. Minimum ref defined: ${refRequired}`)
 		}
 	}
 }
