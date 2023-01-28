@@ -25,7 +25,6 @@ var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8')); //s
 const client = new SteamUser();
 const tf2 = new TeamFortress2(client);	//this starts the GameClient
 
-module.exports.tf2 = tf2	//exporting so that other files within folder can use the same tf2 gameClient
 
 const community = new SteamCommunity();
 const manager = new TradeOfferManager({
