@@ -57,13 +57,13 @@ function craftRecFunc(tf2) 	//scrap= 5000, rec=5001, ref=5002
 			}
 			//save all refs in a list, use shift method to extract the original_id of the metal for crafting
 		}
-		console.log(ref_list)
+		//console.log(ref_list)
 		while(recInBackpack < recRequired)
 		{
 			if(ref_list.length>0) //if reclist doesnt return empty list
 			{
 				console.log("Smelting refined...")
-				tf2.craft([ref_list.shift()], 23)
+				tf2.craft([ref_list.shift()], 23)	//23 = smelt ref recipe
 				recInBackpack+=3					//this will update scrapValue in backpack, work as exit condition for while loop
 			} else {
 				console.log("no ref left to smelt")

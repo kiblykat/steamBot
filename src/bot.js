@@ -7,13 +7,15 @@ var fs = require('fs');
 const { RequestTF2FriendsResponse } = require('tf2/language');
 
 //Requiring from local files
-const config = require('./config.json');
+const config = require('./utils/config.json');
 const  metalManager  = require('./metalManager');
+
 const crafting = require('./crafting');
+var Prices = JSON.parse(fs.readFileSync('./utils/prices_generated.json', 'utf8')); //synchronous version
+
 
 //const Prices = require('./prices.json');	//bad for big json files
 
-var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8')); //synchronous version
 
 // fs.readFile('./src/prices_generated.json', 'utf8', function(err,data){
 // 	if(err) throw err;
@@ -22,8 +24,8 @@ var Prices = JSON.parse(fs.readFileSync('./prices_generated.json', 'utf8')); //s
 
 
 
-const client = new SteamUser();
-const tf2 = new TeamFortress2(client);	//this starts the GameClient
+const client = new SteamUser();			//this starts the Steam Client
+const tf2 = new TeamFortress2(client);	//this starts the Game Client
 
 
 const community = new SteamCommunity();
@@ -46,7 +48,7 @@ client.logOn(logOnOptions);	//this logs me into Steam (NOT TF2)
 //event listener for logOn: sets persona + name, starts games
 client.on('loggedOn', () => {
   console.log('Logged into Steam');
-  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'Cardy B> Trading Card');
+  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'Cardy B> Trading Cards');
   client.gamesPlayed([440]);		//this is the code that starts the tf2 client and loads backpack, so that
 });
 
@@ -56,6 +58,21 @@ client.on('webSession', (sessionid,cookies) =>{
 
 	community.setCookies(cookies);
 	community.startConfirmationChecker(5000, config.identitySecret);
+});
+
+client.on('friendRelationship', (sid, relationship) => {
+	if(relationship == SteamUser.EFriendRelationship.RequestRecipient)
+	{
+		console.log("we recieved a friend request", sid)
+		client.addFriend(sid, function(err, name)		//wtf is name? name is deprecated??? personaName in the documentation dont work!
+		{ 
+			if (err)
+			{
+				console.log(err);
+				return
+			} else console.log("Accepted friend request from", name)
+		})
+	}
 });
 
 //function used in newOffer event listener
@@ -122,15 +139,15 @@ function processOffer(offer){
 manager.on('newOffer', (offer) => {
 	console.log("new offer detected, processing...")
 	processOffer(offer);
-	metalManager.metalManager(tf2)
-	crafting.craftScrap(tf2)
-	crafting.craftRec(tf2)
+	retry = 2										
+	while(retry != 1)								//value of retry will be changed within metalManager function in case bp not found
+	{
+		retry = metalManager.metalManager(tf2)		//5s delay is set within metalManager itself, if bp not found
+	}
+
+	crafting.craftScrap(tf2)	//craft scrap if low
+	crafting.craftRec(tf2)		//craft rec if low
 });
-
-//* * * * * * * * * * * * * CRAFTING * * * * * * * * * * * * * * * * * * *//
-
-var scrapAmt = config.scrapAmt;
-var pollCraft = config.pollCraft;
 
 //event listener to check connection to GameClient (tf2 GC started using gamesPlayed method([440]) above l35)
 tf2.on('connectedToGC', () => {	
@@ -140,15 +157,16 @@ tf2.on('connectedToGC', () => {
 
 //event listener to check if backpackLoaded 
 tf2.on('backpackLoaded', () => {
-	// console.log("hello botjs", tf2)
 	console.log("Loaded our backpack")
 	metalManager.metalManager(tf2)	
 	crafting.craftScrap(tf2)
 	crafting.craftRec(tf2)
 });
 
+//check when crafting is complete
 tf2.on('craftingComplete', (recipe,itemsGained) => {
 	console.log("crafting complete")
+	metalManager.metalManager(tf2)	
 });
 
 
