@@ -13,6 +13,7 @@ const  metalManager  = require('./metalManager');
 const crafting = require('./crafting');
 var Prices = JSON.parse(fs.readFileSync('./utils/prices_generated.json', 'utf8')); //synchronous version
 
+//console.log(Prices)
 
 //const Prices = require('./prices.json');	//bad for big json files
 
@@ -79,7 +80,7 @@ client.on('friendRelationship', (sid, relationship) => {
 function acceptOffer(offer){
 	offer.accept((err) => {
 		console.log("bot accepted an offer");
-		if (err) console.log("there was an error accepting the offer");
+		if (err) console.log(err);
 	});
 }
 
@@ -87,7 +88,7 @@ function acceptOffer(offer){
 function declineOffer(offer){
 	offer.decline((err) => {
 		console.log("bot declined an offer");
-		if (err) console.log("there was an error declining the offer");
+		if (err) console.log(err);
 	});
 }
 
@@ -95,33 +96,59 @@ function declineOffer(offer){
 function processOffer(offer){
 	if (offer.isGlitched() || offer.state === 11 ){
 		console.log("Offer was glitched, declining");
-	} else if (offer.partner.getSteamID64() === config.ownerID) {
-		acceptOffer(offer)
+	// } else if (offer.partner.getSteamID64() === config.kiblykat_ID) { //disable this decisio when trying to mimic actual trade 
+	// 	console.log("offer received from admin") 
+	// 	acceptOffer(offer)
 	} else {
-		var ourItems = offer.itemsToGive;
+		var ourItems = offer.itemsToGive;	//how do i even find itemsToGive method? WHAT OTHER METHODS DOES offer HAVE???????????????
 		var theirItems = offer.itemsToReceive;
+		//console.log(offer.itemsToReceive[0].tags)
 		var ourValue = 0;
 		var theirValue = 0;
+		var markTradeCardBuy = 3 //price of buying marketable trading card = 3 scrap
+		var markTradeCardSell = 6 //price of selling marketable trading card = 6 scrap
 
 		for (var i in ourItems) {
-			var item = ourItems[i].market_name;
-			if(Prices[item]) {
-				ourValue += Prices[item].sell;
-			} else {
-				console.log("Invalid Value. ");
-				ourValue += 999999;
+			var item = ourItems[i].market_name;	//iterating through our items name
+			//if the item is a marketable trading card:
+			console.log(ourItems[i])
+			if(ourItems[i].type.includes("Trading Card"))
+			{
+				if(ourItems[i].marketable == true && (ourItems[i].tags[3].name === 'Trading Card')) 
+				{
+						ourValue += markTradeCardSell;
+				}
 			}
+			else if(item in Prices) 
+			{
+				console.log("Our item present in Pricelist");
+				ourValue += Prices[item].sell;	
+			}else
+			{
+				console.log("Invalid Item ")
+				ourValue += 99999999999999;	//if item is not recognsed (unusual hat), we add 99999 to value so that trade prevented
+			}			
 		}
 
 		for(var i in theirItems) {
 			var item = theirItems[i].market_name;
-			if(Prices[item]) {
-				if(theirItems[i].marketable == true)
+			// console.log("marketable: " + theirItems[i].marketable)
+			// console.log("Trading Card: " + (theirItems[i].tags[3].name === 'Trading Card'))
+			//if their item is a marketable trading card:
+			if(theirItems[i].type.includes("Trading Card"))
+			{
+				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Trading Card'))
 				{
-					theirValue += Prices[item].buy;
+					theirValue += markTradeCardBuy;
 				}
-			} else {
-			console.log("Their value was too low. ");
+			}
+						else if(item in Prices) 
+			{
+				console.log("Our item present in Pricelist");
+				ourValue += Prices[item].sell;	
+			}else
+			{
+				console.log("Invalid Item ")
 			}
 		}
 	}
@@ -139,14 +166,18 @@ function processOffer(offer){
 manager.on('newOffer', (offer) => {
 	console.log("new offer detected, processing...")
 	processOffer(offer);
-	retry = 2										
-	while(retry != 1)								//value of retry will be changed within metalManager function in case bp not found
-	{
-		retry = metalManager.metalManager(tf2)		//5s delay is set within metalManager itself, if bp not found
-	}
-
+	//console.log(tf2.backpack)								
 	crafting.craftScrap(tf2)	//craft scrap if low
 	crafting.craftRec(tf2)		//craft rec if low
+
+	retry = 2		
+	while(retry != 1)								//value of retry will be changed within metalManager function in case bp not found
+	{
+		retry = metalManager.metalManager(tf2)		//5s delay is set within metalManager itself, if bp not found.checks new amount of metal
+		// console.log(retry)
+		// console.log("in while loop")
+	}
+
 });
 
 //event listener to check connection to GameClient (tf2 GC started using gamesPlayed method([440]) above l35)

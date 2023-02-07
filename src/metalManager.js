@@ -17,8 +17,8 @@ function metalManagerFunc(tf2)	//run this before crafting, loads backpack and ch
 
 	if (tf2.backpack == undefined)
 	{
-		setTimeout(function() {
-			console.log("Unable to load backpack, can't craft")
+		setTimeout(()=> {
+			console.log("Unable to load backpack, retrying...")
 		}, 5000);
 		return 0						//0 value used to detect fail condition, to create retry mechanism in bot.js
 	} else {
@@ -48,8 +48,8 @@ function metalManagerFunc(tf2)	//run this before crafting, loads backpack and ch
 		{
 			console.log(`REFINED STOCK LOW!! CRAFT MORE PL0X. Minimum ref defined: ${refRequired}`)
 		}
-		return 1				//1 value used to detect pass condition, to exit retry mechanism in bot.js
 	}
+	return 1				//1 value used to detect pass condition, to exit retry mechanism in bot.js
 }
 
 module.exports.metalManager = metalManagerFunc;
