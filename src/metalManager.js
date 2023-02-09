@@ -14,13 +14,14 @@ function metalManagerFunc(tf2)	//run this before crafting, loads backpack and ch
 	refRequired = 40
 
     // console.log("hello metalManager", tf2);
+	function foo()
+	{
+		console.log("Unable to load backpack, retrying...")
+	}
 
 	if (tf2.backpack == undefined)
 	{
-		setTimeout(()=> {
-			console.log("Unable to load backpack, retrying...")
-		}, 5000);
-		return 0						//0 value used to detect fail condition, to create retry mechanism in bot.js
+		setTimeout(foo,10000)						//0 value used to detect fail condition, to create retry mechanism in bot.js
 	} else {
 		//populate value for _InBackpack
 		count = 0;

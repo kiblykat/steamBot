@@ -100,24 +100,35 @@ function processOffer(offer){
 	// 	console.log("offer received from admin") 
 	// 	acceptOffer(offer)
 	} else {
-		var ourItems = offer.itemsToGive;	//how do i even find itemsToGive method? WHAT OTHER METHODS DOES offer HAVE???????????????
+		var ourItems = offer.itemsToGive;	// add emoticons buying
 		var theirItems = offer.itemsToReceive;
-		//console.log(offer.itemsToReceive[0].tags)
 		var ourValue = 0;
 		var theirValue = 0;
-		var markTradeCardBuy = 3 //price of buying marketable trading card = 3 scrap
-		var markTradeCardSell = 6 //price of selling marketable trading card = 6 scrap
+		var CardBuy = 3 //price of buying marketable trading card = 3 scrap
+		var BackGBuy = 2 //price of buying marketable BG = 2 scrap
+		var SackGemBuy = 8*3*3 //price of buying sack of gems = 8 refined
 
 		for (var i in ourItems) {
-			var item = ourItems[i].market_name;	//iterating through our items name
+			var item = ourItems[i].market_name;	
 			//if the item is a marketable trading card:
-			console.log(ourItems[i])
+			// console.log(ourItems[i])
 			if(ourItems[i].type.includes("Trading Card"))
 			{
 				if(ourItems[i].marketable == true && (ourItems[i].tags[3].name === 'Trading Card')) 
 				{
-						ourValue += markTradeCardSell;
+						ourValue += CardBuy*2;
 				}
+			}
+			else if(ourItems[i].type.includes("Profile Background"))
+			{
+				if(ourItems[i].marketable == true && (ourItems[i].tags[2].name === 'Profile Background'))
+				{
+					ourValue += BackGBuy*2;
+				}
+			}
+			else if(item === ("Sack of Gems"))
+			{
+				ourValue += SackGemBuy*2;
 			}
 			else if(item in Prices) 
 			{
@@ -126,11 +137,12 @@ function processOffer(offer){
 			}else
 			{
 				console.log("Invalid Item ")
+				//console.log(ourItems[i]) //temp to check class of background and how to filter it out
 				ourValue += 99999999999999;	//if item is not recognsed (unusual hat), we add 99999 to value so that trade prevented
 			}			
 		}
 
-		for(var i in theirItems) {
+		for(var i in theirItems) { //iterating through their items (Sack of gems, background, t card, emoticon,)
 			var item = theirItems[i].market_name;
 			// console.log("marketable: " + theirItems[i].marketable)
 			// console.log("Trading Card: " + (theirItems[i].tags[3].name === 'Trading Card'))
@@ -139,10 +151,21 @@ function processOffer(offer){
 			{
 				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Trading Card'))
 				{
-					theirValue += markTradeCardBuy;
+					theirValue += CardBuy;
 				}
 			}
-						else if(item in Prices) 
+			else if(theirItems[i].type.includes("Profile Background"))
+			{
+				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Profile Background'))
+				{
+					theirValue += BackGBuy;
+				}
+			}
+			else if(item === ("Sack of Gems"))
+			{
+				theirValue += SackGemBuy;
+			}
+			else if(item in Prices) 
 			{
 				console.log("Our item present in Pricelist");
 				ourValue += Prices[item].sell;	
@@ -167,16 +190,15 @@ manager.on('newOffer', (offer) => {
 	console.log("new offer detected, processing...")
 	processOffer(offer);
 	//console.log(tf2.backpack)								
-	crafting.craftScrap(tf2)	//craft scrap if low
-	crafting.craftRec(tf2)		//craft rec if low
-
 	retry = 2		
 	while(retry != 1)								//value of retry will be changed within metalManager function in case bp not found
 	{
 		retry = metalManager.metalManager(tf2)		//5s delay is set within metalManager itself, if bp not found.checks new amount of metal
-		// console.log(retry)
-		// console.log("in while loop")
+		console.log(retry)
+		console.log("in while loop")
 	}
+	crafting.craftScrap(tf2)	//craft scrap if low
+	crafting.craftRec(tf2)		//craft rec if low
 
 });
 
