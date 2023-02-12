@@ -9,6 +9,7 @@ const { RequestTF2FriendsResponse } = require('tf2/language');
 //Requiring from local files
 const config = require('./utils/config.json');
 const  metalManager  = require('./metalManager');
+const chat = require('./utils/chat_messages.json');
 
 const crafting = require('./crafting');
 var Prices = JSON.parse(fs.readFileSync('./utils/prices_generated.json', 'utf8')); //synchronous version
@@ -61,20 +62,30 @@ client.on('webSession', (sessionid,cookies) =>{
 	community.startConfirmationChecker(5000, config.identitySecret);
 });
 
-client.on('friendRelationship', (sid, relationship) => {
+client.on('friendRelationship', (steamID, relationship) => {
 	if(relationship == SteamUser.EFriendRelationship.RequestRecipient)
 	{
 		console.log("we recieved a friend request", sid)
-		client.addFriend(sid, function(err, name)		//wtf is name? name is deprecated??? personaName in the documentation dont work!
+		client.addFriend(sid, function(err, name)
 		{ 
 			if (err)
 			{
 				console.log(err);
 				return
-			} else console.log("Accepted friend request from", name)
+			} else {
+				console.log("Accepted friend request from", name)
+				client.chatMessage(steamID, "Hi I'm CardyBot! Type !help for more info");
+			}
 		})
 	}
 });
+
+client.on('friendMessage', (steamID, message)=> {
+	if (message == "!help") {
+		client.chatMessage(steamID, chat.help_message)
+	}
+});
+
 
 //function used in newOffer event listener
 function acceptOffer(offer){
