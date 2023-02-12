@@ -49,7 +49,7 @@ client.logOn(logOnOptions);	//this logs me into Steam (NOT TF2)
 //event listener for logOn: sets persona + name, starts games
 client.on('loggedOn', () => {
   console.log('Logged into Steam');
-  client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'Cardy B> Trading Cards');
+  //client.setPersona(SteamUser.EPersonaState.LookingToTrade, 'Cardy B> Trading Cards');
   client.gamesPlayed([440]);		//this is the code that starts the tf2 client and loads backpack, so that
 });
 
@@ -104,31 +104,77 @@ function processOffer(offer){
 		var theirItems = offer.itemsToReceive;
 		var ourValue = 0;
 		var theirValue = 0;
-		var CardBuy = 3 //price of buying marketable trading card = 3 scrap
-		var BackGBuy = 2 //price of buying marketable BG = 2 scrap
-		var SackGemBuy = 8*3*3 //price of buying sack of gems = 8 refined
+		var cardBuy = 3 //trading card(marketable) = 3 scrap
+		var backGrBuy = 2 //BG = 2 scrap
+		var sackGemBuy = 7*3*3 //sack of gems = 6 ref
+		var csCaseBuy = 15 //CSGO case = 1.66 ref
 
+/* - - - - - - - - - - - - - - - - - - CLIENT TRADE OFFER AREA - - - - - - - - - - - - - - - - - - */
+		for(var i in theirItems) { 
+			var item = theirItems[i].market_name;
+			// console.log("marketable: " + theirItems[i].marketable)
+			// console.log("Trading Card: " + (theirItems[i].tags[3].name === 'Trading Card'))
+			console.log(theirItems[i])
+			//if their item is a marketable trading card:
+			if(theirItems[i].type.includes("Trading Card"))
+			{
+				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Trading Card'))
+				{
+					theirValue += cardBuy;
+				}
+			}
+			else if(theirItems[i].type.includes("Profile Background"))
+			{
+				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Profile Background'))
+				{
+					theirValue += backGrBuy;
+				}
+			}
+			else if(item === ("Sack of Gems"))
+			{
+				theirValue += sackGemBuy;
+			}
+			else if(ourItems[i].type.includes("Base Grade Container"))
+			{
+				ourValue += csCaseBuy;
+			}
+			else if(item in Prices) 
+			{
+				console.log("Our item present in Pricelist");
+				ourValue += Prices[item].sell;	
+			}else
+			{
+				console.log("Invalid Item ")
+			}
+		}
+	}
+
+/* - - - - - - - - - - - - - - - - - - BOT TRADE OFFER AREA - - - - - - - - - - - - - - - - - - */ 
 		for (var i in ourItems) {
 			var item = ourItems[i].market_name;	
 			//if the item is a marketable trading card:
-			// console.log(ourItems[i])
+			//console.log(ourItems[i])
 			if(ourItems[i].type.includes("Trading Card"))
 			{
 				if(ourItems[i].marketable == true && (ourItems[i].tags[3].name === 'Trading Card')) 
 				{
-						ourValue += CardBuy*2;
+						ourValue += cardBuy*2;
 				}
 			}
 			else if(ourItems[i].type.includes("Profile Background"))
 			{
 				if(ourItems[i].marketable == true && (ourItems[i].tags[2].name === 'Profile Background'))
 				{
-					ourValue += BackGBuy*2;
+					ourValue += backGrBuy*2;
 				}
 			}
 			else if(item === ("Sack of Gems"))
 			{
-				ourValue += SackGemBuy*2;
+				ourValue += sackGemBuy*2;
+			}
+			else if(ourItems[i].type.includes("Base Grade Container"))
+			{
+				ourValue += csCaseBuy*2;
 			}
 			else if(item in Prices) 
 			{
@@ -142,39 +188,6 @@ function processOffer(offer){
 			}			
 		}
 
-		for(var i in theirItems) { //iterating through their items (Sack of gems, background, t card, emoticon,)
-			var item = theirItems[i].market_name;
-			// console.log("marketable: " + theirItems[i].marketable)
-			// console.log("Trading Card: " + (theirItems[i].tags[3].name === 'Trading Card'))
-			//if their item is a marketable trading card:
-			if(theirItems[i].type.includes("Trading Card"))
-			{
-				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Trading Card'))
-				{
-					theirValue += CardBuy;
-				}
-			}
-			else if(theirItems[i].type.includes("Profile Background"))
-			{
-				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Profile Background'))
-				{
-					theirValue += BackGBuy;
-				}
-			}
-			else if(item === ("Sack of Gems"))
-			{
-				theirValue += SackGemBuy;
-			}
-			else if(item in Prices) 
-			{
-				console.log("Our item present in Pricelist");
-				ourValue += Prices[item].sell;	
-			}else
-			{
-				console.log("Invalid Item ")
-			}
-		}
-	}
 	console.log("Our value was " +ourValue)
 	console.log("Their value was " +theirValue)
 
