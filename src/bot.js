@@ -65,8 +65,8 @@ client.on('webSession', (sessionid,cookies) =>{
 client.on('friendRelationship', (steamID, relationship) => {
 	if(relationship == SteamUser.EFriendRelationship.RequestRecipient)
 	{
-		console.log("we recieved a friend request", sid)
-		client.addFriend(sid, function(err, name)
+		console.log("we recieved a friend request", steamID)
+		client.addFriend(steamID, function(err, name)
 		{ 
 			if (err)
 			{
@@ -116,8 +116,9 @@ function processOffer(offer){
 		var ourValue = 0;
 		var theirValue = 0;
 		var cardBuy = 3 //trading card(marketable) = 3 scrap
+		var cardBuyNMark = 2 //trading card(N marketable) = 2 scrap
 		var backGrBuy = 2 //BG = 2 scrap
-		var sackGemBuy = 7*3*3 //sack of gems = 6 ref
+		var sackGemBuy = 7*3*3 //sack of gems = 7 ref
 		var csCaseBuy = 15 //CSGO case = 1.66 ref
 
 /* - - - - - - - - - - - - - - - - - - CLIENT TRADE OFFER AREA - - - - - - - - - - - - - - - - - - */
@@ -132,6 +133,9 @@ function processOffer(offer){
 				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Trading Card'))
 				{
 					theirValue += cardBuy;
+				} else if(theirItems[i].marketable == false && (theirItems[i].tags[3].name === 'Trading Card'))
+				{
+					theirValue += cardBuyNMark;
 				}
 			}
 			else if(theirItems[i].type.includes("Profile Background"))
@@ -170,6 +174,9 @@ function processOffer(offer){
 				if(ourItems[i].marketable == true && (ourItems[i].tags[3].name === 'Trading Card')) 
 				{
 						ourValue += cardBuy*2;
+				} else if(ourItems[i].marketable == false && (ourItems[i].tags[3].name === 'Trading Card'))
+				{
+					theirValue += cardBuyNMark*2;
 				}
 			}
 			else if(ourItems[i].type.includes("Profile Background"))
