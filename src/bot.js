@@ -105,6 +105,7 @@ function declineOffer(offer){
 
 //function used in manager.on to process offers based on prices
 function processOffer(offer){
+	console.log(offer)
 	if (offer.isGlitched() || offer.state === 11 ){
 		console.log("Offer was glitched, declining");
 	// } else if (offer.partner.getSteamID64() === config.kiblykat_ID) { //disable this decisio when trying to mimic actual trade 
@@ -126,7 +127,6 @@ function processOffer(offer){
 			var item = theirItems[i].market_name;
 			// console.log("marketable: " + theirItems[i].marketable)
 			// console.log("Trading Card: " + (theirItems[i].tags[3].name === 'Trading Card'))
-			console.log(theirItems[i])
 			//if their item is a marketable trading card:
 			if(theirItems[i].type.includes("Trading Card"))
 			{
@@ -149,14 +149,13 @@ function processOffer(offer){
 			{
 				theirValue += sackGemBuy;
 			}
-			else if(ourItems[i].type.includes("Base Grade Container"))
+			else if(theirItems[i].type.includes("Base Grade Container"))
 			{
-				ourValue += csCaseBuy;
+				theirValue += csCaseBuy;
 			}
 			else if(item in Prices) 
-			{
-				console.log("Our item present in Pricelist");
-				ourValue += Prices[item].sell;	
+			{				
+				theirValue += Prices[item].buy;	
 			}else
 			{
 				console.log("Invalid Item ")
@@ -176,7 +175,7 @@ function processOffer(offer){
 						ourValue += cardBuy*2;
 				} else if(ourItems[i].marketable == false && (ourItems[i].tags[3].name === 'Trading Card'))
 				{
-					theirValue += cardBuyNMark*2;
+					ourValue += cardBuyNMark*2;
 				}
 			}
 			else if(ourItems[i].type.includes("Profile Background"))
@@ -196,7 +195,6 @@ function processOffer(offer){
 			}
 			else if(item in Prices) 
 			{
-				console.log("Our item present in Pricelist");
 				ourValue += Prices[item].sell;	
 			}else
 			{
@@ -208,6 +206,9 @@ function processOffer(offer){
 
 	console.log("Our value was " +ourValue)
 	console.log("Their value was " +theirValue)
+
+	//include number of items offered, and number of metal requested here
+
 
 	if(ourValue <= theirValue) {
 		acceptOffer(offer);
