@@ -101,11 +101,11 @@ function declineOffer(offer){
 		console.log("bot declined an offer");
 		if (err) console.log(err);
 	});
+
 }
 
 //function used in manager.on to process offers based on prices
 function processOffer(offer){
-	console.log(offer)
 	if (offer.isGlitched() || offer.state === 11 ){
 		console.log("Offer was glitched, declining");
 	// } else if (offer.partner.getSteamID64() === config.kiblykat_ID) { //disable this decisio when trying to mimic actual trade 
@@ -209,11 +209,14 @@ function processOffer(offer){
 
 	//include number of items offered, and number of metal requested here
 
-
 	if(ourValue <= theirValue) {
 		acceptOffer(offer);
+		client.chatMessage(offer.partner, "Trade successful, please come again! :)")
+		client.chatMessage(76561198045771031, `New trade accepted. Transaction: ${theirValue} scrap`)
+
 	} else{
 		declineOffer(offer);
+		client.chatMessage(offer.partner, `Your offer: ${theirValue} scrap. CardyBot offer: ${ourValue} scrap. Pls add ${theirValue - ourValue} more scrap and send a new offer :) `)
 	}
 }
 
