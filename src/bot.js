@@ -140,7 +140,7 @@ function processOffer(offer){
 			}
 			else if(theirItems[i].type.includes("Profile Background"))
 			{
-				if(theirItems[i].marketable == true && (theirItems[i].tags[3].name === 'Profile Background'))
+				if(theirItems[i].marketable == true && (theirItems[i].tags[2].name === 'Profile Background'))
 				{
 					theirValue += backGrBuy;
 				}
