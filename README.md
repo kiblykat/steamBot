@@ -7,7 +7,6 @@ include a config.json file in the src folder, with your following personal data 
 	"sharedSecret":"abcd", 
 	"identitySecret":"abcd",
 	"kiblykat_ID":"abcd",
-
 	"scrapAmt":"25",
 	"pollCraft":"35"
 }
