@@ -1,5 +1,5 @@
 # steamBot
-include a config.json file in the src folder, with your following personal data included, for the bot to work.
+include a config.json file in the src/utils folder, with your following personal data included, for the bot to work.
 
 {
 	"username":"abcd",
