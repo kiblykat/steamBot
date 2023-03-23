@@ -2,3 +2,5 @@
 
 node_modules
 sda
+market listing(currentListing).csv
+marketListing(history).xlsx
